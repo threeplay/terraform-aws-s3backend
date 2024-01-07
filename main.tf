@@ -8,15 +8,15 @@ resource "aws_resourcegroups_group" "resourcegroups_group" {
   resource_query {
     query = jsonencode({
       ResourceTypeFilters : ["AWS::AllSupported"],
-      TagFilters: [{ Key: "ResourceGroup", Values: [var.namespace] }]
+      TagFilters : [{ Key : "ResourceGroup", Values : [var.namespace] }]
     })
   }
 }
 
 resource "random_string" "rand" {
-  length = 8
+  length  = 8
   special = false
-  upper = false
+  upper   = false
 }
 
 resource "aws_kms_key" "kms_key" {
@@ -48,7 +48,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_bucket_sse" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "aws:kms"
+      sse_algorithm     = "aws:kms"
       kms_master_key_id = aws_kms_key.kms_key.arn
     }
   }
@@ -56,14 +56,14 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_bucket_sse" {
 
 resource "aws_dynamodb_table" "dynamodb_table" {
   hash_key = "LockID"
-  name = "${var.namespace}-state-lock"
+  name     = "${var.namespace}-state-lock"
 
   attribute {
     name = "LockID"
     type = "S"
   }
 
-  read_capacity = 1
+  read_capacity  = 1
   write_capacity = 1
 
   tags = {
