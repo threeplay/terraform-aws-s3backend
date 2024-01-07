@@ -7,18 +7,17 @@ locals {
 resource "aws_iam_role" "iam_role" {
   name = "${var.namespace}-tf-assume-role"
   force_detach_policies = true
-  assume_role_policy = <<-EOF
-  {
-    "Version": "2012-10-17",
-    "Statement": [
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "AWS": "${local.principal_arn}"
+  assume_role_policy = jsonencode({
+    Version: "2012-10-17",
+    Statement: {
+      Action : "sts:AssumeRole",
+      Principal : {
+        "AWS" : local.principal_arn,
       },
-      "Effect": "Allow"
-    ]
-  }
-EOF
+      Effect : "Allow"
+    }
+  })
+
   tags = {
     ResourceGroup = var.namespace
   }
